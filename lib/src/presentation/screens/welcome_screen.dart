@@ -1,10 +1,8 @@
 import 'package:bloc_ecommerce/src/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
-
 import '../../routes/route_pages.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -21,7 +19,10 @@ class WelcomeScreen extends StatelessWidget {
           children: [
             Text(
               'Let’s Get Started',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
