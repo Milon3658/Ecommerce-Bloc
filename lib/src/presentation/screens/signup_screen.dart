@@ -1,11 +1,8 @@
 import 'package:bloc_ecommerce/src/blocs/authentication/remember_switch_cubit.dart';
 import 'package:bloc_ecommerce/src/presentation/widgets/widgets.dart';
-import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-
 import '../../blocs/blocs.dart';
 
 class SignupScreen extends StatelessWidget {
