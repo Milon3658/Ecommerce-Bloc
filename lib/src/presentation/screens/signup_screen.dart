@@ -6,11 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../blocs/blocs.dart';
+
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
     return Scaffold(
         appBar: AppBar(
           leading: const DefaultBackButton(),
@@ -31,48 +34,90 @@ class SignupScreen extends StatelessWidget {
                   ),
                 ),
                 const Gap(40),
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: 'User name',
-                      labelStyle: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant)),
-                ),
-                const Gap(20),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                      labelText: 'email',
-                      labelStyle: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant)),
-                ),
-                const Gap(20),
-                TextFormField(
-                  obscureText: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.outlineVariant),
-                    suffixIcon: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.visibility_off),
-                      color: Theme.of(context).colorScheme.outlineVariant,
-                    ),
-                  ),
+                BlocBuilder<SignupBloc, SignupState>(
+                  builder: (context, state) {
+                    if (state is SignupInitial) {
+                      return Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: state.usernameController,
+                              decoration: InputDecoration(
+                                  labelText: 'User name',
+                                  labelStyle: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant)),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your username';
+                                }
+                                return null;
+                              },
+                            ),
+                            const Gap(20),
+                            TextFormField(
+                              controller: state.emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                  labelText: 'email',
+                                  labelStyle: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant)),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your email';
+                                }
+                                return null;
+                              },
+                            ),
+                            const Gap(20),
+                            TextFormField(
+                              controller: state.passwordController,
+                              obscureText: true,
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                labelStyle: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outlineVariant),
+                                suffixIcon: IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.visibility_off),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your password';
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: Container(),
+                      );
+                    }
+                  },
                 ),
                 const Gap(20),
                 Row(
@@ -102,8 +147,13 @@ class SignupScreen extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: FullWidthButton(
-          text: 'Sign Up',
-          onPressed: () => context.pushNamed(Routes.HOME),
-        ));
+            text: 'Sign Up',
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                print("Form is valid, proceed with signup");
+              } else {
+                print("Form is invalid, please correct the errors");
+              }
+            }));
   }
 }

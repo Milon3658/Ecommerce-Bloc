@@ -16,6 +16,7 @@ class BlocEcommerceApp extends StatelessWidget {
             create: (context) => SplashCubit()..endSplash(),
           ),
           BlocProvider(create: (context) => RememberSwitchCubit()),
+          BlocProvider(create: (context) => SignupBloc()),
         ],
         child: ScreenUtilInit(
           designSize: const Size(360, 690),
