@@ -1,5 +1,7 @@
+import 'package:bloc_ecommerce/src/blocs/blocs.dart';
 import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'theme/theme.dart';
 
@@ -8,7 +10,9 @@ class BlocEcommerceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    return MultiBlocProvider(providers: [
+      BlocProvider(create: (context)=> SplashCubit()..endSplash(),)
+    ], child: ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -20,6 +24,6 @@ class BlocEcommerceApp extends StatelessWidget {
           routerConfig: RoutePages.ROUTER,
         );
       },
-    );
+    ));
   }
 }
