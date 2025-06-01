@@ -1,4 +1,5 @@
 import 'package:bloc_ecommerce/src/blocs/blocs.dart';
+import 'package:bloc_ecommerce/src/data/repository/repository.dart';
 import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,26 +11,33 @@ class BlocEcommerceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiRepositoryProvider(
         providers: [
-          BlocProvider(
-            create: (context) => SplashCubit()..endSplash(),
-          ),
-          BlocProvider(create: (context) => RememberSwitchCubit()),
-          BlocProvider(create: (context) => SignupBloc()),
+          RepositoryProvider(create: (context) => AuthRepository()),
         ],
-        child: ScreenUtilInit(
-          designSize: const Size(360, 690),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (_, child) {
-            return MaterialApp.router(
-              theme: const MaterialTheme(TextTheme()).light(),
-              darkTheme: const MaterialTheme(TextTheme()).dark(),
-              debugShowCheckedModeBanner: false,
-              routerConfig: RoutePages.ROUTER,
-            );
-          },
-        ));
+        child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => SplashCubit()..endSplash(),
+              ),
+              BlocProvider(create: (context) => RememberSwitchCubit()),
+              BlocProvider(create: (context) => SignupBloc()),
+              BlocProvider(
+                  create: (context) =>
+                      LoginBloc(context.read<AuthRepository>()))
+            ],
+            child: ScreenUtilInit(
+              designSize: const Size(360, 690),
+              minTextAdapt: true,
+              splitScreenMode: true,
+              builder: (_, child) {
+                return MaterialApp.router(
+                  theme: const MaterialTheme(TextTheme()).light(),
+                  darkTheme: const MaterialTheme(TextTheme()).dark(),
+                  debugShowCheckedModeBanner: false,
+                  routerConfig: RoutePages.ROUTER,
+                );
+              },
+            )));
   }
 }

@@ -1,5 +1,7 @@
+import 'package:bloc_ecommerce/src/blocs/authentication/login_bloc.dart';
 import 'package:bloc_ecommerce/src/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
@@ -24,23 +26,35 @@ class WelcomeScreen extends StatelessWidget {
                   .titleLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  SocialLoginButton(
-                      buttonType: SocialLoginButtonType.facebook,
-                      onPressed: () {}),
-                  const Gap(20),
-                  SocialLoginButton(
-                      buttonType: SocialLoginButtonType.twitter,
-                      onPressed: () {}),
-                  const Gap(20),
-                  SocialLoginButton(
-                      buttonType: SocialLoginButtonType.google,
-                      onPressed: () {}),
-                ],
-              ),
+            BlocConsumer<LoginBloc, LoginState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                if (state is loginLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      SocialLoginButton(
+                          buttonType: SocialLoginButtonType.facebook,
+                          onPressed: () {}),
+                      const Gap(20),
+                      SocialLoginButton(
+                          buttonType: SocialLoginButtonType.twitter,
+                          onPressed: () {}),
+                      const Gap(20),
+                      SocialLoginButton(
+                          buttonType: SocialLoginButtonType.google,
+                          onPressed: () {
+                            context.read<LoginBloc>().add(RequestGoogleLogin());
+                          }),
+                    ],
+                  ),
+                );
+              },
             ),
             Column(
               mainAxisSize: MainAxisSize.min,

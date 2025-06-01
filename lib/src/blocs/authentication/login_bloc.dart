@@ -1,13 +1,26 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import '../../data/repository/repository.dart';
 
 part 'login_event.dart';
+
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial()) {
-    on<LoginEvent>((event, emit) {});
+  final AuthRepository authRepository;
+
+  LoginBloc(this.authRepository) : super(LoginInitial()) {
+    on<RequestGoogleLogin>((event, emit) async {
+      try {
+        emit(loginLoading());
+        final user = await authRepository.signInWithGoogle();
+        debugPrint('user : ${user?.displayName.toString()}');
+        emit(loginSuccess());
+      } catch (error) {
+        print('$error');
+        emit(loginFailed(error.toString()));
+      }
+    });
   }
 }
