@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
 import '../../data/repository/repository.dart';
 
 part 'login_event.dart';
@@ -22,5 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(loginFailed(error.toString()));
       }
     });
+
+    on<RequestFacebookLogin>((event, emit) {});
   }
 }

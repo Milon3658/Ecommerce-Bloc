@@ -30,4 +30,6 @@ class AuthRepository {
       return null;
     }
   }
+
+  Future<void> signInWithFacebook() async {}
 }
