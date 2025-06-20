@@ -18,7 +18,7 @@ class BlocEcommerceApp extends StatelessWidget {
         child: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => SplashCubit()..endSplash(),
+                create: (context) => SplashCubit()..startSplash(),
               ),
               BlocProvider(create: (context) => RememberSwitchCubit()),
               BlocProvider(create: (context) => SignupBloc()),

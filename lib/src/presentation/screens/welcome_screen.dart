@@ -27,7 +27,35 @@ class WelcomeScreen extends StatelessWidget {
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
             BlocConsumer<LoginBloc, LoginState>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                if (state is loginSuccess) {
+                  context.pushNamed(Routes.HOME);
+                }
+                if(state is facebookLoginSuccess){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Coming Soon'),
+                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  );
+                }
+                if(state is twitterLoginSuccess){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Coming Soon'),
+                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  );
+                }
+                else if (state is loginFailed) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Login failed'),
+                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  );
+                }
+              },
               builder: (context, state) {
                 if (state is loginLoading) {
                   return const Center(
@@ -40,11 +68,15 @@ class WelcomeScreen extends StatelessWidget {
                     children: [
                       SocialLoginButton(
                           buttonType: SocialLoginButtonType.facebook,
-                          onPressed: () {}),
+                          onPressed: () {
+                            context.read<LoginBloc>().add(RequestFacebookLogin());
+                          }),
                       const Gap(20),
                       SocialLoginButton(
                           buttonType: SocialLoginButtonType.twitter,
-                          onPressed: () {}),
+                          onPressed: () {
+                            context.read<LoginBloc>().add(RequestTwitterLogin());
+                          }),
                       const Gap(20),
                       SocialLoginButton(
                           buttonType: SocialLoginButtonType.google,

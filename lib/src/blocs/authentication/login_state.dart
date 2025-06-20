@@ -14,3 +14,7 @@ class loginFailed extends LoginState {
 
   loginFailed(this.message);
 }
+
+class facebookLoginSuccess extends LoginState {}
+
+class twitterLoginSuccess extends LoginState {}

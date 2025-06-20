@@ -8,15 +8,15 @@ class AuthRepository {
 
   Future<User?> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? _googleSignIn = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleSignIn = await GoogleSignIn().signIn();
 
-      if (_googleSignIn == null) {
+      if (googleSignIn == null) {
         debugPrint("User canceled the signin process.");
         return null;
       }
 
       final GoogleSignInAuthentication googleSignInAuthentication =
-          await _googleSignIn.authentication;
+          await googleSignIn.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
       );

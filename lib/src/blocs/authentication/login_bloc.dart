@@ -22,6 +22,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
 
-    on<RequestFacebookLogin>((event, emit) {});
+
+    on<RequestFacebookLogin>((event, emit) {emit(facebookLoginSuccess());});
+    on<RequestTwitterLogin>((event, emit) {emit(twitterLoginSuccess());});
   }
 }
