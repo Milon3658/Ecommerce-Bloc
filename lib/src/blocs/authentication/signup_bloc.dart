@@ -22,9 +22,11 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
           emit(SignupSuccess());
         } else {
           emit(SignupFailed(message: 'Something went wrong'));
+          emit(SignupInitial());
         }
       } catch (e) {
         emit(SignupFailed(message: e.toString()));
+        emit(SignupInitial());
       }
     });
   }
