@@ -2,6 +2,7 @@ import 'package:bloc_ecommerce/src/blocs/authentication/login_bloc.dart';
 import 'package:bloc_ecommerce/src/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
@@ -29,7 +30,10 @@ class WelcomeScreen extends StatelessWidget {
             BlocConsumer<LoginBloc, LoginState>(
               listener: (context, state) {
                 if (state is loginSuccess) {
-                  context.pushNamed(Routes.HOME);
+                  Fluttertoast.showToast(msg: "Login successful");
+                  Future.delayed(const Duration(microseconds: 500), (){
+                    context.goNamed(Routes.HOME);
+                  });
                 }
                 if(state is facebookLoginSuccess){
                   ScaffoldMessenger.of(context).showSnackBar(
