@@ -1,7 +1,6 @@
 import 'package:bloc_ecommerce/src/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -27,9 +26,9 @@ class AuthRepository {
       final UserCredential authResult =
           await _auth.signInWithCredential(credential);
       // debugPrint('User: ${authResult.user?.email}');
-
-      if(authResult.user != null){
-        await createUserInDatabase(authResult.user!);
+      if (authResult.user != null) {
+        await createUserInDatabase(
+            authResult.user!, authResult.user?.displayName);
       }
       return authResult.user;
     } catch (error) {
@@ -39,17 +38,44 @@ class AuthRepository {
   }
 
   Future<void> signInWithFacebook() async {}
+
   Future<void> signInWithTwitter() async {}
 
-  Future<void> createUserInDatabase(User user) async {
+  Future<void> createUserInDatabase(User user, String? userName) async {
     final data = UserModel(
-      name: user.displayName,
+      name: user.displayName ?? userName,
       email: user.email,
       photoUrl: user.photoURL,
     );
-    await _firestore.collection('users').doc(user.uid).set(data.toJson()).then((value){
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .set(data.toJson())
+        .then((value) {
       debugPrint('User created in firebase database: ${user.email}');
     });
     debugPrint('Creating user in database: ${user.email}');
+  }
+
+  Future<User?> signUpWithEmail(
+      {required String userName,
+      required String email,
+      required String password}) async {
+    try {
+      final credential = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      final user = credential.user;
+      if (user != null) {
+        await createUserInDatabase(user, userName);
+      }
+      return user;
+    } catch (e) {
+      debugPrint("Error signing up with email: $e");
+      return null;
+    }
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 }

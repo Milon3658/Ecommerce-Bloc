@@ -6,6 +6,7 @@ class FullWidthButton extends StatelessWidget {
   final String text;
   final Color? backgroundColor;
   final Color? textColor;
+  final Widget? buttonChild;
 
   const FullWidthButton({
     super.key,
@@ -13,6 +14,7 @@ class FullWidthButton extends StatelessWidget {
     this.onPressed,
     this.backgroundColor,
     this.textColor,
+    this.buttonChild,
   });
 
   @override
@@ -25,11 +27,13 @@ class FullWidthButton extends StatelessWidget {
         color:
             backgroundColor ?? Theme.of(context).colorScheme.onPrimaryContainer,
         child: Center(
-            child: Text(
-          text,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: textColor ?? Theme.of(context).colorScheme.onSecondary),
-        )),
+            child: buttonChild ??
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: textColor ??
+                          Theme.of(context).colorScheme.onSecondary),
+                )),
       ),
     );
   }
