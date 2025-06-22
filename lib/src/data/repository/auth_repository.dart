@@ -25,37 +25,19 @@ class AuthRepository {
 
       final UserCredential authResult =
           await _auth.signInWithCredential(credential);
-      // debugPrint('User: ${authResult.user?.email}');
       if (authResult.user != null) {
         await createUserInDatabase(
             authResult.user!, authResult.user?.displayName);
       }
       return authResult.user;
     } catch (error) {
-      debugPrint("Error signing in with Google: $error");
-      return null;
+      throw Exception('Failed to sign in with Google: $error');
     }
   }
 
   Future<void> signInWithFacebook() async {}
 
   Future<void> signInWithTwitter() async {}
-
-  Future<void> createUserInDatabase(User user, String? userName) async {
-    final data = UserModel(
-      name: user.displayName ?? userName,
-      email: user.email,
-      photoUrl: user.photoURL,
-    );
-    await _firestore
-        .collection('users')
-        .doc(user.uid)
-        .set(data.toJson())
-        .then((value) {
-      debugPrint('User created in firebase database: ${user.email}');
-    });
-    debugPrint('Creating user in database: ${user.email}');
-  }
 
   Future<User?> signUpWithEmail(
       {required String userName,
@@ -70,9 +52,23 @@ class AuthRepository {
       }
       return user;
     } catch (e) {
-      debugPrint("Error signing up with email: $e");
-      return null;
+      throw Exception('Failed to sign up: $e');
     }
+  }
+
+  Future<void> createUserInDatabase(User user, String? userName) async {
+    final data = UserModel(
+      name: user.displayName ?? userName,
+      email: user.email,
+      photoUrl: user.photoURL,
+    );
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .set(data.toJson())
+        .then((value) {
+      debugPrint('User created in firebase database: ${user.email}');
+    });
   }
 
   Future<void> signOut() async {
