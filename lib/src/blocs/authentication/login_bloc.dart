@@ -1,12 +1,8 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import '../../data/repository/repository.dart';
-
 part 'login_event.dart';
-
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
@@ -29,6 +25,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
     on<RequestTwitterLogin>((event, emit) {
       emit(twitterLoginSuccess());
+    });
+
+    on<RequestLoginWithEmail>((event, emit) async {
+      emit(loginLoading());
+      try {
+        await authRepository.SignInWithEmail(event.email, event.password)
+            .then((value) => emit(loginSuccess()));
+      } catch (e) {
+        emit(LoginInitial());
+        emit(loginFailed(e.toString()));
+      }
     });
 
     on<RequestSignOut>((event, emit) async {

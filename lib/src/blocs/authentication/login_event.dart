@@ -21,8 +21,10 @@ class RequestTwitterLogin extends LoginEvent {
 class RequestLoginWithEmail extends LoginEvent {
   final String email;
   final String password;
+  final bool isRemember;
 
-  RequestLoginWithEmail({required this.email, required this.password});
+  RequestLoginWithEmail(
+      {required this.email, required this.password, required this.isRemember});
   @override
   List<Object?> get props => [email, password];
 }

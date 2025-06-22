@@ -1,8 +1,10 @@
 import 'package:bloc_ecommerce/src/blocs/blocs.dart';
 import 'package:bloc_ecommerce/src/presentation/widgets/widgets.dart';
+import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -22,7 +24,14 @@ class LoginScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_back)),
       ),
       body: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is loginSuccess) {
+            context.goNamed(Routes.HOME);
+          }
+          if (state is loginFailed) {
+            Fluttertoast.showToast(msg: state.message);
+          }
+        },
         builder: (context, state) {
           if (state is LoginInitial) {
             return Form(
@@ -112,7 +121,9 @@ class LoginScreen extends StatelessWidget {
               ),
             );
           } else {
-            return Container();
+            return Container(
+              height: 200.h,
+            );
           }
         },
       ),
@@ -128,8 +139,10 @@ class LoginScreen extends StatelessWidget {
                 if (state is LoginInitial) {
                   if (formkey.currentState?.validate() ?? false) {
                     context.read<LoginBloc>().add(RequestLoginWithEmail(
-                        email: state.emailcontroller.text.trim(),
-                        password: state.passwordcontroller.text.trim()));
+                          email: state.emailcontroller.text.trim(),
+                          password: state.passwordcontroller.text.trim(),
+                          isRemember: RememberSwitchCubit.isRemember,
+                        ));
                   }
                 }
               },

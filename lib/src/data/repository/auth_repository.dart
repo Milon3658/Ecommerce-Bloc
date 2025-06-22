@@ -56,6 +56,16 @@ class AuthRepository {
     }
   }
 
+  Future<User?> SignInWithEmail(String email, String password) async {
+    try {
+      final user = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return user.user;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<void> createUserInDatabase(User user, String? userName) async {
     final data = UserModel(
       name: user.displayName ?? userName,
