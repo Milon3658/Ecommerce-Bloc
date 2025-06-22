@@ -1,4 +1,5 @@
 import 'package:bloc_ecommerce/src/blocs/blocs.dart';
+import 'package:bloc_ecommerce/src/data/preference/local_preference.dart';
 import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,13 +13,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-        ),
         actions: [
           BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
@@ -46,8 +40,8 @@ class HomeScreen extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.bold,
                 ),
-            title: const Text(
-              'Hello',
+            title: Text(
+              'Hello, ${LocalPreferences.getString('name')}',
             ),
             subtitle: const Text('Welcome to Laza'),
           )

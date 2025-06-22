@@ -1,4 +1,6 @@
 import 'package:bloc_ecommerce/src/data/model/user_model.dart';
+import 'package:bloc_ecommerce/src/data/preference/local_preference.dart';
+import 'package:bloc_ecommerce/src/utils/asset_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +60,15 @@ class AuthRepository {
 
   Future<User?> SignInWithEmail(String email, String password) async {
     try {
-      final user = await _auth.signInWithEmailAndPassword(
+      final userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      return user.user;
+      final user = userCredential.user;
+      LocalPreferences.setString('name', user?.displayName ?? '');
+      LocalPreferences.setString('email', user?.email ?? '');
+      LocalPreferences.setString(
+          'photoUrl', user?.photoURL ?? AssetManager.APP_LOGO);
+      LocalPreferences.setString('phoneNumber', user?.phoneNumber ?? '');
+      return user;
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -79,6 +87,11 @@ class AuthRepository {
         .then((value) {
       debugPrint('User created in firebase database: ${user.email}');
     });
+    LocalPreferences.setString('name', user.displayName ?? userName ?? '');
+    LocalPreferences.setString('email', user.email ?? '');
+    LocalPreferences.setString(
+        'photoUrl', user.photoURL ?? AssetManager.APP_LOGO);
+    LocalPreferences.setString('phoneNumber', user.phoneNumber ?? '');
   }
 
   Future<void> signOut() async {
