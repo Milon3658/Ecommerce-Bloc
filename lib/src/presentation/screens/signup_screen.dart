@@ -14,7 +14,6 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final thm = Theme.of(context).colorScheme.onSurface;
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
