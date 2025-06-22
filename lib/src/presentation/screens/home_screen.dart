@@ -1,4 +1,9 @@
+import 'package:bloc_ecommerce/src/blocs/blocs.dart';
+import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -7,14 +12,46 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
-        actions: [],
-      ),
-      body: Center(
-        child: Text(
-          'Welcome to the Home Screen',
-          style: Theme.of(context).textTheme.bodySmall,
+        title: Text(
+          '',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
         ),
+        actions: [
+          BlocListener<LoginBloc, LoginState>(
+            listener: (context, state) {
+              if (state is SignOutSuccess) {
+                context.goNamed(Routes.WELCOME);
+              } else if (state is SignOutFailed) {
+                Fluttertoast.showToast(msg: state.message);
+              }
+            },
+            child: IconButton(
+                onPressed: () {
+                  context.read<LoginBloc>().add(RequestSignOut());
+                },
+                icon: const Icon(Icons.exit_to_app)),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          ListTile(
+            titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+            subtitleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.bold,
+                ),
+            title: const Text(
+              'Hello',
+            ),
+            subtitle: const Text('Welcome to Laza'),
+          )
+        ],
       ),
     );
   }

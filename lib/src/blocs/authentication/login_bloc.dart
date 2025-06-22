@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import '../../data/repository/repository.dart';
@@ -17,13 +19,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         debugPrint('user : ${user?.displayName.toString()}');
         emit(loginSuccess());
       } catch (error) {
-        print('$error');
         emit(loginFailed(error.toString()));
       }
     });
 
+    on<RequestFacebookLogin>((event, emit) {
+      emit(facebookLoginSuccess());
+    });
+    on<RequestTwitterLogin>((event, emit) {
+      emit(twitterLoginSuccess());
+    });
 
-    on<RequestFacebookLogin>((event, emit) {emit(facebookLoginSuccess());});
-    on<RequestTwitterLogin>((event, emit) {emit(twitterLoginSuccess());});
+    on<RequestSignOut>((event, emit) async {
+      emit(SignOutLoading());
+      try {
+        await authRepository.signOut().then((value) => emit(SignOutSuccess()));
+      } catch (e) {
+        emit(SignOutFailed(message: e.toString()));
+      }
+    });
   }
 }

@@ -14,7 +14,25 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          SizedBox(
+            width: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text('skip'),
+                IconButton(
+                  icon: const Icon(Icons.skip_next),
+                  onPressed: () {
+                    context.pushNamed(Routes.HOME);
+                  },
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,31 +49,33 @@ class WelcomeScreen extends StatelessWidget {
               listener: (context, state) {
                 if (state is loginSuccess) {
                   Fluttertoast.showToast(msg: "Login successful");
-                  Future.delayed(const Duration(microseconds: 500), (){
+                  Future.delayed(const Duration(microseconds: 500), () {
                     context.goNamed(Routes.HOME);
                   });
                 }
-                if(state is facebookLoginSuccess){
+                if (state is facebookLoginSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Coming Soon'),
-                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   );
                 }
-                if(state is twitterLoginSuccess){
+                if (state is twitterLoginSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Coming Soon'),
-                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   );
-                }
-                else if (state is loginFailed) {
+                } else if (state is loginFailed) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('Login failed'),
-                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   );
                 }
@@ -73,13 +93,17 @@ class WelcomeScreen extends StatelessWidget {
                       SocialLoginButton(
                           buttonType: SocialLoginButtonType.facebook,
                           onPressed: () {
-                            context.read<LoginBloc>().add(RequestFacebookLogin());
+                            context
+                                .read<LoginBloc>()
+                                .add(RequestFacebookLogin());
                           }),
                       const Gap(20),
                       SocialLoginButton(
                           buttonType: SocialLoginButtonType.twitter,
                           onPressed: () {
-                            context.read<LoginBloc>().add(RequestTwitterLogin());
+                            context
+                                .read<LoginBloc>()
+                                .add(RequestTwitterLogin());
                           }),
                       const Gap(20),
                       SocialLoginButton(

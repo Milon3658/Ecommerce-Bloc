@@ -157,7 +157,9 @@ class SignupScreen extends StatelessWidget {
                     );
                   } else {
                     return Center(
-                      child: Container(),
+                      child: Container(
+                        height: 200.h,
+                      ),
                     );
                   }
                 },

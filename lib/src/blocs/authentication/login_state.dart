@@ -18,3 +18,22 @@ class loginFailed extends LoginState {
 class facebookLoginSuccess extends LoginState {}
 
 class twitterLoginSuccess extends LoginState {}
+
+class SignOutLoading extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SignOutSuccess extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SignOutFailed extends LoginState {
+  final String message;
+
+  SignOutFailed({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

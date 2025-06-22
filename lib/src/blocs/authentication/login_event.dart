@@ -8,3 +8,8 @@ class RequestGoogleLogin extends LoginEvent {}
 class RequestFacebookLogin extends LoginEvent {}
 
 class RequestTwitterLogin extends LoginEvent {}
+
+class RequestSignOut extends LoginEvent {
+  @override
+  List<Object?> get props => [];
+}
