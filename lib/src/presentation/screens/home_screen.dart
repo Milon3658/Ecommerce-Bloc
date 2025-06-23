@@ -1,15 +1,16 @@
 import 'package:bloc_ecommerce/src/blocs/blocs.dart';
 import 'package:bloc_ecommerce/src/blocs/store/brand_bloc.dart';
 import 'package:bloc_ecommerce/src/data/preference/local_preference.dart';
+import 'package:bloc_ecommerce/src/data/utils/shimmer_effect.dart';
 import 'package:bloc_ecommerce/src/presentation/widgets/brand_tile.dart';
 import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -67,9 +68,14 @@ class HomeScreen extends StatelessWidget {
                     separatorBuilder: (context, index) => const Gap(10),
                     itemCount: state.brands.length);
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return ListView.separated(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) =>
+                        const ShimmerEffect.rectangular(width: 120, height: 40),
+                    separatorBuilder: (context, index) => const Gap(10),
+                    itemCount: 4);
               }
             }),
           )
