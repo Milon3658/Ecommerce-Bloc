@@ -1,0 +1,105 @@
+import 'dart:convert';
+
+ProductModel productModelFromJson(String str) => ProductModel.fromJson(json.decode(str));
+
+String productModelToJson(ProductModel data) => json.encode(data.toJson());
+
+class ProductModel {
+    final String? productName;
+    final String? productPrice;
+    final List<ImageGallary>? imageGallary;
+    final List<Variant>? variants;
+    final String? productDetails;
+    final String? brand;
+
+    ProductModel({
+        this.productName,
+        this.productPrice,
+        this.imageGallary,
+        this.variants,
+        this.productDetails,
+        this.brand,
+    });
+
+    factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
+        productName: json["product_name"],
+        productPrice: json["product_price"],
+        imageGallary: json["image_gallary"] == null ? [] : List<ImageGallary>.from(json["image_gallary"]!.map((x) => ImageGallary.fromJson(x))),
+        variants: json["variants"] == null ? [] : List<Variant>.from(json["variants"]!.map((x) => Variant.fromJson(x))),
+        productDetails: json["product_details"],
+        brand: json["brand"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "product_name": productName,
+        "product_price": productPrice,
+        "image_gallary": imageGallary == null ? [] : List<dynamic>.from(imageGallary!.map((x) => x.toJson())),
+        "variants": variants == null ? [] : List<dynamic>.from(variants!.map((x) => x.toJson())),
+        "product_details": productDetails,
+        "brand": brand,
+    };
+}
+
+class ImageGallary {
+    final String? title;
+    final String? imageUrl;
+
+    ImageGallary({
+        this.title,
+        this.imageUrl,
+    });
+
+    factory ImageGallary.fromJson(Map<String, dynamic> json) => ImageGallary(
+        title: json["title"],
+        imageUrl: json["image_url"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "title": title,
+        "image_url": imageUrl,
+    };
+}
+
+class Variant {
+    final String? category;
+    final List<Item>? items;
+
+    Variant({
+        this.category,
+        this.items,
+    });
+
+    factory Variant.fromJson(Map<String, dynamic> json) => Variant(
+        category: json["category"],
+        items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "category": category,
+        "items": items == null ? [] : List<dynamic>.from(items!.map((x) => x.toJson())),
+    };
+}
+
+class Item {
+    final String? title;
+    final String? description;
+    final String? price;
+
+    Item({
+        this.title,
+        this.description,
+        this.price,
+    });
+
+    factory Item.fromJson(Map<String, dynamic> json) => Item(
+        title: json["title"],
+        description: json["description"],
+        price: json["price"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "title": title,
+        "description": description,
+        "price": price,
+    };
+}

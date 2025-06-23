@@ -1,6 +1,7 @@
 import 'package:bloc_ecommerce/src/blocs/blocs.dart';
-import 'package:bloc_ecommerce/src/data/repository/profile_repository.dart';
+import 'package:bloc_ecommerce/src/blocs/store/brand_bloc.dart';
 import 'package:bloc_ecommerce/src/data/repository/repository.dart';
+import 'package:bloc_ecommerce/src/data/repository/srote_repository.dart';
 import 'package:bloc_ecommerce/src/routes/route_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ class BlocEcommerceApp extends StatelessWidget {
         providers: [
           RepositoryProvider(create: (context) => AuthRepository()),
           RepositoryProvider(create: (context) => ProfileRepository()),
+          RepositoryProvider(create: (context) => StoreRepository()),
         ],
         child: MultiBlocProvider(
             providers: [
@@ -29,7 +31,11 @@ class BlocEcommerceApp extends StatelessWidget {
                       SignupBloc(context.read<AuthRepository>())),
               BlocProvider(
                   create: (context) =>
-                      LoginBloc(context.read<AuthRepository>()))
+                      LoginBloc(context.read<AuthRepository>())),
+              BlocProvider(
+                  create: (context) =>
+                      BrandBloc(context.read<StoreRepository>())
+                        ..add(const FetchBrands())),
             ],
             child: ScreenUtilInit(
               designSize: const Size(360, 690),
