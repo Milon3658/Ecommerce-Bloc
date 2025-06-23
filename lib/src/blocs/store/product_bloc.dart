@@ -1,18 +1,25 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_ecommerce/src/data/model/product_model';
+import 'package:bloc_ecommerce/src/data/repository/product_repository.dart';
 import 'package:equatable/equatable.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  ProductBloc() : super(ProductInitial());
-
-  @override
-  Stream<ProductState> mapEventToState(
-    ProductEvent event,
-  ) async* {
-    // TODO: implement mapEventToState
+  final ProductRepository repository;
+  ProductBloc(this.repository) : super(ProductInitial()) {
+    on<FetchProducts>((event, emit) async {
+      try {
+        emit(ProductLoading());
+        await repository
+            .fetchProducts()
+            .then((product) => emit(ProductSuccess(product)));
+      } catch (e) {
+        emit(ProductError(e.toString()));
+      }
+    });
   }
 }
